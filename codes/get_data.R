@@ -12,22 +12,26 @@
 ##############################
 
 # Libraries to use
+rm(list = ls())
 #install.packages('WDI')
 library(WDI)
+library(tidyverse)
 
-# Importing the data
-# COVID-19 Data
 
-covid_csv <- 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/10-01-2020.csv'
-covid_data <- read.csv(covid_csv)
+# Download COVID cross-sectional data
+date <- '10-01-2020'
+covid_url <- paste0('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/',date,'.csv')
+covid_raw <- read.csv(covid_url)
 
-# WDI population data 2019
+# Download population data for 2019
+pop_raw <- WDI(indicator=c('SP.POP.TOTL'), country="all", start=2019, end=2019)
 
-gdp_data = WDI(indicator='NY.GDP.PCAP.PP.KD', country="all", start=2019, end=2019)
-
-# Save data into raw
-my_path <- "/Users/Terez/OneDrive - Central European University/Data_Analysis_02/Assignment_1/data/"
-write_csv(gdp_data, paste0(my_path,'raw/WDI_lifeexp_raw.csv'))
+# Save the raw files
+my_path <- "/Users/Terez/OneDrive - Central European University/Data_Analysis_02/DA2_Assignment_1/data/"
+# covid data
+write_csv(covid_raw, paste0(my_path,'raw/covid_10_01_2020_raw.csv'))
+# population data
+write_csv(pop_raw, paste0(my_path,'raw/pop_WDI_2019_raw.csv'))
 
 
 
