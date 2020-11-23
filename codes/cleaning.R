@@ -21,7 +21,7 @@ library(stats)
 covid_url <- 'https://raw.githubusercontent.com/Julianna-szabo/DA2_Assignment_1/main/data/raw/covid_10_01_2020_raw.csv'
 cv <- read_csv(covid_url)
 
-pop_url <- 'https://raw.githubusercontent.com/Julianna-szabo/DA2_Assignment_1/main/data/raw/pop_WDI_2019.csv'
+pop_url <- 'https://raw.githubusercontent.com/Julianna-szabo/DA2_Assignment_1/main/data/raw/pop_WDI_2019_raw.csv'
 pop <- read_csv(pop_url)
 
 # COVID DATA CLEANING
