@@ -1,0 +1,189 @@
+---
+title: "COVID-19 Analysis"
+author: "Julianna Szabo"
+output: hdml_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Clear memory
+rm(list=ls())
+
+# Packages to use
+library(tidyverse)
+# For scaling ggplots
+require(scales)
+# Estimate piecewise linear splines
+#install.packages("lspline")
+library(lspline)
+# Estimate robust SE
+#install.packages("estimatr")
+library(estimatr)
+# Compare models with robust SE
+#install.packages("texreg")
+library(texreg)
+# For different themes
+#install.packages(ggthemes)
+library(ggthemes)
+# For hypothesis testing
+#install.packages(cars)
+library(car)
+```
+
+# Importing data
+
+```{r, echo = FALSE, include=FALSE}
+data_path <- 'https://raw.githubusercontent.com/Julianna-szabo/DA2_Assignment_1/main/data/clean/covid_pop_09_11_2020_clean.csv'
+df <- read_csv(data_path)
+```
+
+My question for this analysis is:
+What is the correlation between registered cases and deaths per capita?
+
+My y variable will be Deaths per Capita and my x  will be Registered Cases per Capita
+
+The original data comes in absolute numbers instead of per capita so that transformation may cause some inaccuracies since population numbers are from last year.
+My population is all the cases and all the deaths by COVID throughout the world.
+My sample is therefore very relevant since it has that data, although some countries may not be as accurate when recording these, overall it is a relatively good representation of the population.
+
+First let's see what the data looks like
+
+```{r, echo = FALSE}
+glimpse(df)
+```
+
+Let's take a look at the data
+```{r, echo = FALSE, warning = FALSE}
+df %>%
+  keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(value)) +
+  facet_wrap(~key, scales = "free") +
+  geom_histogram(bins= 20)+
+  theme_bw() + 
+  scale_fill_wsj()
+```
+
+It looks like both confirmed cases and deaths are skewed with a right tail.
+This may be lessed in the per capita numbers calculated later. 
+Further, the analysis may benefit from a log tranformation later.
+There seem to be some extreme values in both confirmed and deaths
+
+```{r, echo = FALSE}
+summary(df)
+```
+
+While with the summary one can see that the range is huge, I have decided to keep all the observations, since most of the extreme values will most likely be resolved once we do a per Capita transformation
+
+# Create new variables
+
+```{r}
+df <- df %>% mutate( deaths_ppc = death/population,
+                     cases_ppc = confirmed/population)
+```
+
+## Scaling
+
+Looking at the graphs from a scaling perspective, I have decided to transform the PPC numbers into per 10000 people instead of per one person that way they are easier to interpret because the numbers on the scale are easier to understand and compare.
+
+```{r}
+df <- df %>% mutate( deaths_ppc = (death/population)*10000,
+                     cases_ppc = (confirmed/population)*10000)
+```
+
+# Distribution of variables
+
+## Distribution of x
+```{r, echo = FALSE, warning = FALSE}
+df %>%
+  ggplot(aes(x = cases_ppc)) +
+  geom_histogram(bins= 20)+
+  labs(x = "Cases per 10'000 people", y = "Count")
+
+df %>% 
+  summarise(
+    mean = mean(cases_ppc),
+    median = median(cases_ppc),
+    min = min(cases_ppc),
+    max = max(cases_ppc),
+    sd = sd(cases_ppc)
+  )
+```
+
+## Distribution of y
+```{r, echo = FALSE, warning = FALSE}
+df %>%
+  ggplot(aes(x = deaths_ppc)) +
+  geom_histogram(bins= 20) +
+  labs(x = "Deaths per 10'000 people", y = "Count")
+
+df %>% 
+  summarise(
+    mean = mean(deaths_ppc),
+    median = median(deaths_ppc),
+    min = min(deaths_ppc),
+    max = max(deaths_ppc),
+    sd = sd(deaths_ppc)
+  )
+```
+
+Overall both x and y have many observations around zero and have a long right tail.
+While x has higher number overall the distribution is very similar in shape.
+
+# Modeling
+
+##ln transformation
+```{r}
+df <- df %>% mutate( ln_cases_ppc = log( cases_ppc ),
+                     ln_deaths_ppc= log( deaths_ppc) )
+```
+
+The log - log transformation seems to be the best fit. Substantively it is easy to interpret and works with percentages which is great for comparison.
+It is also more pleasant to look at since the extreme values have been fixed by the log transformation.
+Statistically it seems to be the most collective and the CI seems the least spread out around most of it.
+
+To be able to use this in the future I need to remove some values that give infinity when doing the transformation.
+
+```{r}
+df <- df[!is.infinite(df$ln_deaths_ppc),]
+```
+
+Pick Weighted OLS
+MORE TEST TO BE ADDED
+
+```{r}
+reg4 <- lm_robust(ln_deaths_ppc ~ ln_cases_ppc, data = df , weights = population)
+summary( reg4 )
+```
+```{r, echo = FALSE, warning = FALSE}
+ggplot(data = df, aes(x = ln_cases_ppc, y = ln_deaths_ppc)) +
+  geom_point(data = df, aes(size=population),  color = 'blue', shape = 16, alpha = 0.6,  show.legend=F) +
+  geom_smooth(aes(weight = population), method = "lm", color='red')+
+  labs(x = "ln (Cases per 10'000 people)",y = "ln (Deaths per 10'000 people)")
+```
+
+# Hypothesis testing
+```{r, echo = FALSE}
+linearHypothesis( reg4 , "ln_cases_ppc = 0")
+```
+
+# Residual analysis
+
+First I will create my variables that I will need for the analysis
+```{r}
+df$reg4_y_pred <- reg4$fitted.values
+df$reg4_res <- df$ln_deaths_ppc - df$reg4_y_pred 
+```
+
+## Countries who lost the most people to COVID
+```{r, echo = FALSE}
+df %>% top_n( -5 , reg4_res ) %>% 
+  select( country , ln_deaths_ppc , reg4_y_pred , reg4_res )
+```
+
+## Countries who saved the most people in COVID
+```{r, echo = FALSE}
+df %>% top_n( 5 , reg4_res ) %>% 
+  select( country , ln_deaths_ppc , reg4_y_pred , reg4_res )
+```
