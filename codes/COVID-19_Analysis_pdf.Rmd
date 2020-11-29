@@ -44,6 +44,8 @@ library(knitr)
 library(pander)
 #install.packages(tibble)
 library(tibble)
+
+## Github Repo of Assignment: https://github.com/Julianna-szabo/DA2_Assignment_1
 ```
 
 # Executive summary
