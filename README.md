@@ -26,5 +26,5 @@ Throughout the analysis I created some additional variables for per capita calcu
 | recovered | Number of people who have recovered from COVID-19 |
 | active | Number of people who are currently infected with COVID-19 |
 | Combined_Key | A combined field of City, State, and Country |
-| Incident_date | Cases per 100,000 persons  |
+| Incident_rate | Cases per 100,000 persons  |
 | Case_Fatality_Ratio (%) | Number recorded deaths / Number cases |
