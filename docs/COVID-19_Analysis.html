@@ -163,13 +163,13 @@ code span.ot { color: #007020; }
 <h1>Executive summary</h1>
 <p>In this project I have analyzed the correlation between COVID-19 cases per 10’000 people and COVID-19 deaths per 10’000 people. I have found that they have a linear correlation best explained by a Weighted linear model using population as weights. The model shows that usually mode cases lead to more deaths, but population in the country play a role since countries with higher population doing a good or a bad job dealing with the pandemic have an affect on the curve. The strength of my results are the great fit of the model to the data, but the weakness is that there might be some misreposrting in the data, that could lead to skewed results.</p>
 </div>
-<div id="importing-data" class="section level1">
-<h1>Importing data</h1>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
 <p>My question for this analysis is: What is the correlation between registered cases per capita and deaths per capita?</p>
-<p>My y variable will be Deaths per Capita and my x will be Registered Cases per Capita</p>
-<p>The original data comes in absolute numbers instead of per capita so that transformation may cause some inaccuracies since population numbers are from last year. My population is all the cases and all the deaths by COVID throughout the world. My sample is therefore very relevant since it has that data, although some countries may not be as accurate when recording these, overall it is a relatively good representation of the population.</p>
+<p>My y variable will be Deaths per capita and my x will be Registered Cases per capita</p>
+<p>The original data comes in absolute numbers instead of per capita so that transformation may cause some inaccuracies since population numbers are from last year. My population is all the cases and all the deaths by COVID-19 throughout the world. My sample is therefore very relevant since it has that data, although some countries may not be as accurate when recording these, overall it is a relatively good representation of the population.</p>
 <p>Both confirmed cases and deaths are skewed with a right tail (see Appendix 1). This may be lessened in the per capita numbers calculated later. Further, the analysis may benefit from a log transformation later. There seem to be some extreme values in both confirmed and deaths</p>
-<p>While with the summary one can see that the range is huge, I have decided to keep all the observations, since most of the extreme values will most likely be resolved once we do a per Capita transformation.</p>
+<p>While with the summary one can see that the range is huge, I have decided to keep all the observations, since most of the extreme values will most likely be resolved once we do a per capita transformation.</p>
 </div>
 <div id="create-new-variables" class="section level1">
 <h1>Create new variables</h1>
