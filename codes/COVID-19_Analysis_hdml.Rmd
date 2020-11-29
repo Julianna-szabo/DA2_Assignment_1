@@ -5,10 +5,7 @@ output:
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
-knit: (function(inputFile, encoding) { 
-      rmarkdown::render(inputFile,
-                        encoding=encoding, 
-                        output_file=file.path(dirname(inputFile), out_dir, 'analysis.html')) })
+    latex_engine: xelatex
 ---
 
 ```{r setup, include=FALSE}
@@ -38,11 +35,16 @@ library(ggthemes)
 # For hypothesis testing
 #install.packages(cars)
 library(car)
+# For visuatiozations of graphs
+#install.packages(geosphere)
 library(geosphere)
 library(moments)
 library(dplyr)
 library(knitr)
+# For display of data tables
+#install.packages(pander)
 library(pander)
+#install.packages(tibble)
 library(tibble)
 ```
 
@@ -168,15 +170,15 @@ The weights mean that countries with a higher population are given a larger impa
 
 # Hypothesis testing
 
-For this hypothesis test, I will use a 95% Confidence Interval.
-
-Model 1: restricted model  
-Model 2: ln_deaths_ppc ~ ln_cases_ppc
+For this hypothesis test, I will use a 95% Confidence Interval (CI).
+$$H_{0}: {β}={0}$$
+$$H_{1}: {β}\neq{0}$$
 ```{r, echo = FALSE, fig.asp=0.50}
-hypothesis <- linearHypothesis( reg4 , "ln_cases_ppc = 0")
-hypothesis <- data.frame(model = 1:2, hypothesis)
-kable(hypothesis)
+summary <- summary(reg4)
+kable(summary$coefficients)
 ```
+
+The t-value for the slope is aproximately 11, which is way above the value of 2 for CI 95%. Therefore we can reject the null. Also the p-value is very small making this prediction for the t-value correct with a high likeliness.
 
 # Residual analysis
 
@@ -412,6 +414,10 @@ On the table, it is clear to see that all four of these models fit well to the d
 While the alpha and beta also do not change significantly for the Weighted linear regression the R^2 increases from 0.79 for all the other models to 0.9.
 
 
-Reasons for picking Weighted linear regression
-Substansive: Since more people usually means more cases, it makes sense to add                     population as a weight, even with per capita numbers. Especially in                 his case, some large counties who are doing great could be gives                   more weight than some small country that is doing very bad.
-Statistical: The weighted linear regression has the best R^2 of the four models.                   Further its coefficients are similar to the other regressions and                  have very small p-values (under 0.01).
+## Reasons for picking Weighted linear regression
+
+### Substansive:  
+Since more people usually means more cases, it makes sense to add                      * population as a weight, even with per capita numbers. Especially in his case, some large counties who are doing great could be gives more weight than some small country that is doing very bad.
+
+### Statistical:  
+The weighted linear regression has the best R^2 of the four models.                   Further its coefficients are similar to the other regressions and have very small p-values (under 0.01).

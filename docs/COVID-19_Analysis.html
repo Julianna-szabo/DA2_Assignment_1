@@ -231,36 +231,44 @@ code span.ot { color: #007020; }
 </div>
 <div id="hypothesis-testing" class="section level1">
 <h1>Hypothesis testing</h1>
-<p>For this hypothesis test, I will use a 95% Confidence Interval.</p>
-<p>Model 1: restricted model<br />
-Model 2: ln_deaths_ppc ~ ln_cases_ppc</p>
+<p>For this hypothesis test, I will use a 95% Confidence Interval (CI). <span class="math display">\[H_{0}: {β}={0}\]</span> <span class="math display">\[H_{1}: {β}\neq{0}\]</span></p>
 <table>
 <thead>
 <tr class="header">
-<th align="right">model</th>
-<th align="right">Res.Df</th>
-<th align="right">Df</th>
-<th align="right">Chisq</th>
-<th align="right">Pr..Chisq.</th>
+<th align="left"></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+<th align="right">CI Lower</th>
+<th align="right">CI Upper</th>
+<th align="right">DF</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">170</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">(Intercept)</td>
+<td align="right">-3.3789366</td>
+<td align="right">0.2904825</td>
+<td align="right">-11.63215</td>
+<td align="right">0</td>
+<td align="right">-3.9523783</td>
+<td align="right">-2.805495</td>
+<td align="right">169</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
-<td align="right">169</td>
-<td align="right">1</td>
-<td align="right">122.7842</td>
+<td align="left">ln_cases_ppc</td>
+<td align="right">0.9007591</td>
+<td align="right">0.0812900</td>
+<td align="right">11.08080</td>
 <td align="right">0</td>
+<td align="right">0.7402844</td>
+<td align="right">1.061234</td>
+<td align="right">169</td>
 </tr>
 </tbody>
 </table>
+<p>The t-value for the slope is aproximately 11, which is way above the value of 2 for CI 95%. Therefore we can reject the null. Also the p-value is very small making this prediction for the t-value correct with a high likeliness.</p>
 </div>
 <div id="residual-analysis" class="section level1">
 <h1>Residual analysis</h1>
@@ -541,7 +549,17 @@ Model 2: ln_deaths_ppc ~ ln_cases_ppc</p>
 <div id="comparing-models" class="section level2">
 <h2>Comparing models</h2>
 <p>On the table, it is clear to see that all four of these models fit well to the data. In the linear model we have an alpha of -3.74 and a beta of 0.94. Both of these values have a very low p-value of less than 0.1. The model also has a good R°2 value at .79. These numbers do not change significantly for the quadratic or the PLS model either, which have an apha of -3.71 and -3.77 respectively. In the quardatic, one can see that the sqared term has almost no impact on the line since it’s coefficient is only 0.01. The PLS also does not change the line-of-best-fit much since the slopes of the two lines are relatively close togehter. While the alpha and beta also do not change significantly for the Weighted linear regression the R^2 increases from 0.79 for all the other models to 0.9.</p>
-<p>Reasons for picking Weighted linear regression Substansive: Since more people usually means more cases, it makes sense to add population as a weight, even with per capita numbers. Especially in his case, some large counties who are doing great could be gives more weight than some small country that is doing very bad. Statistical: The weighted linear regression has the best R^2 of the four models. Further its coefficients are similar to the other regressions and have very small p-values (under 0.01).</p>
+</div>
+<div id="reasons-for-picking-weighted-linear-regression" class="section level2">
+<h2>Reasons for picking Weighted linear regression</h2>
+<div id="substansive" class="section level3">
+<h3>Substansive:</h3>
+<p>Since more people usually means more cases, it makes sense to add * population as a weight, even with per capita numbers. Especially in his case, some large counties who are doing great could be gives more weight than some small country that is doing very bad.</p>
+</div>
+<div id="statistical" class="section level3">
+<h3>Statistical:</h3>
+<p>The weighted linear regression has the best R^2 of the four models. Further its coefficients are similar to the other regressions and have very small p-values (under 0.01).</p>
+</div>
 </div>
 </div>
 </section>
