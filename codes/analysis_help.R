@@ -33,6 +33,8 @@ library(texreg)
 #install.packages(ggthemes)
 library(ggthemes)
 library(ggplot2)
+library(flextable)
+library(magrittr)
 
 
 # Import  and Inspect data ------------------------------------------------
