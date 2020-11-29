@@ -11,20 +11,8 @@ Link to the COVID-19 data: https://github.com/CSSEGISandData/COVID-19/tree/maste
 
 Throughout the analysis I created some additional variables for per capita calculations since the original numbers were in totals.
 
-# Variables
-| Variable | Description |
-| --- | --- |
-| FIPS | Unique number used to identify US states |
-| Admin2 | Cities (only available for USA)  |
-| Provice_State | State or Provice of a given country |
-| Country_Region | The country or Region of a given observation|
-| Last_update | The date and time the numbers were last updated |
-| lat | Latitudinal coordinate of the place where the observations originated |
-| long | Longitudinal coordinate of the place where the observations originated |
-| confirmed | Confirmed number of COVID-19 cases |
-| deaths | Number of deaths due to COVID-19 |
-| recovered | Number of people who have recovered from COVID-19 |
-| active | Number of people who are currently infected with COVID-19 |
-| Combined_Key | A combined field of City, State, and Country |
-| Incident_rate | Cases per 100,000 persons  |
-| Case_Fatality_Ratio (%) | Number recorded deaths / Number cases |
+# Outcome
+
+I have found that they have a linear correlation best explained by a Weighted linear model using population as weights.
+The model shows that usually mode cases lead to more deaths, but population in the country play a role since countries with higher population doing a good or a bad job dealing with the pandemic have an affect on the curve.
+The strength of my results are the great fit of the model to the data, but the weakness is that there might be some misreposrting in the data, that could lead to skewed results.
